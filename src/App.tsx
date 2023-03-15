@@ -7,7 +7,7 @@ function App() {
   return (
     <main className="bg-gray600 h-screen">
       <Header />
-      <form className="flex w-1/2 -mt-5 mx-auto	items-center justify-center gap-2">
+      <form className="flex w-1/2 -mt-7 mx-auto	items-center justify-center gap-2">
         <Input />
         <Button />
       </form>
