@@ -9,14 +9,3 @@ export default function Button() {
     </div>
   );
 }
-
-
-// {size.width <= 500 ? (
-//     <button type={type} disabled={disabled}>
-//       <IoIosAddCircleOutline style={{ fontSize: "1rem" }} />
-//     </button>
-//   ) : (
-//     <button type={type} disabled={disabled}>
-//       Criar <IoIosAddCircleOutline style={{ fontSize: "1rem" }} />
-//     </button>
-//   )}
