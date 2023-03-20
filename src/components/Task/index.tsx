@@ -1,17 +1,34 @@
 import CheckboxTask from "../Checkbox";
 import { Icon } from "@iconify/react";
 
-export default function Task() {
+interface TaskProps {
+  checked?: boolean;
+  content: string;
+  onCheckedTask: (task: string, checked: boolean) => void;
+  isChecked: boolean;
+}
+
+export default function Task({
+  content,
+  onCheckedTask,
+  checked,
+  isChecked,
+}: TaskProps) {
+  function handleCheckedTask(checked: boolean) {
+    onCheckedTask(content, checked);
+  }
+
   return (
-    <div className="w-1/2 flex justify-between items-start bg-gray400 text-gray100 text-sm p-4 my-4 mx-auto rounded-lg	 gap-3">
+    <div
+      className="w-1/2 flex justify-between items-start bg-gray400 text-gray100 text-sm p-4 my-4 mx-auto rounded-lg gap-3"
+      onChange={() => onCheckedTask}
+    >
       <div className="flex flex-row gap-3 items-center">
-        <CheckboxTask />
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Lorem ipsum dolor sit amet, consectetur adipisicing elit.Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        <CheckboxTask onChange={handleCheckedTask} />
+
+        <p>{content}</p>
       </div>
-      {/* <div className="flex flex-row gap-3 items-center line-through	text-gray300">
-        <CheckboxTask />
-        <p>Lorem ipsum dolor sit ame.</p>
-      </div> */}
+
       <button className="flex items-center justify-center">
         <Icon
           icon="tabler:trash"
@@ -21,7 +38,3 @@ export default function Task() {
     </div>
   );
 }
-
-//   .trash:hover {
-//     color: var(--danger);
-//   }
