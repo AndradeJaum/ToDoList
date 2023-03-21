@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface InputProps {
   name: string;
   type: string;
@@ -15,8 +13,6 @@ export default function Input({
   value,
   onChange,
 }: InputProps) {
-  const [inputTask, setInputTas] = useState([]);
-
   return (
     <div className="w-full">
       <input
