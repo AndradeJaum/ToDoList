@@ -1,30 +1,58 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Button from "./components/Button";
 import Header from "./components/Header";
 import Input from "./components/Input";
 import Task from "./components/Task";
 import { TaskBoard } from "./components/TaskBoard";
+import { v4 as uuidv4 } from "uuid";
+
+interface Task {
+  name: string;
+  id: string;
+  checked: boolean;
+}
 
 function App() {
-
-  const [tasks, setTasks] = useState([{}]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [inputTask, setInputTask] = useState("");
   const tasksAmmount = tasks.length;
 
-  const [checkedTasks, setCheckedTasks] = useState<string[]>([]);
-  const completedTask = checkedTasks.length;
-
-  const newTask = tasks
+  useEffect(() => {
+    // recuperar tarefas do Local Storage
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+  
 
   function handleSubmitForm(event: FormEvent) {
     event.preventDefault();
-
-    setTasks([...tasks, inputTask]);
+    const newTask: Task = {
+      name: inputTask,
+      id: uuidv4(),
+      checked: false,
+    };
+  
+    // Verifica se a task já está salva no Local Storage
+    const savedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const savedTask = savedTasks.find((task: Task) => task.id === newTask.id);
+  
+    if (savedTask) {
+      // Se a task já estiver salva, mantém a informação de checked
+      newTask.checked = savedTask.checked;
+    }
+  
+    setTasks([...tasks, newTask]);
     setInputTask("");
+  }
 
-0  }
-
-  // localStorage.setItem("tasks", JSON.stringify(tasks));
+  const completedTasksAmount = tasks.reduce((acc, task) => {
+    if (task.checked) {
+      acc++;
+    }
+    return acc;
+  }, 0);
 
   function handleNewTaskChange(event: ChangeEvent<HTMLInputElement>) {
     event.target.setCustomValidity("");
@@ -33,22 +61,20 @@ function App() {
 
   const isTaskEmpty = inputTask.length === 0;
 
-  function checkTasks(task: string, checked: boolean) {
-    if (checked) {
-      setCheckedTasks((value) => [...value, task]);
-    } else {
-      const filterTasks = checkedTasks.filter((value) => {
-        return value !== task;
-      });
-      setCheckedTasks(filterTasks);
-    }
+  function handleDeleteTask(id: string) {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
   }
 
-  function deleteTasks(delTask: string) {
-    const tasksToDelete = tasks.filter((task) => {
-      return task !== delTask;
+  function handleCheckTask(id: string, checked: boolean) {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, checked: checked };
+      } else {
+        return task;
+      }
     });
-    setTasks(tasksToDelete);
+    setTasks(updatedTasks);
   }
 
   return (
@@ -58,6 +84,7 @@ function App() {
       <form
         className="flex w-1/2 -mt-7 mx-auto	items-center justify-center gap-2"
         onSubmit={handleSubmitForm}
+        autoComplete="off"
       >
         <Input
           name="task"
@@ -80,7 +107,7 @@ function App() {
         <div className="flex gap-2">
           <strong className="text-purple text-sm">Concluídas</strong>
           <p className="text-gray100 text-xs font-bold bg-gray400 py-0.5 px-2 rounded-full">
-            {completedTask} de {tasksAmmount}
+            {`${completedTasksAmount} de ${tasksAmmount}`}
           </p>
         </div>
       </div>
@@ -91,12 +118,13 @@ function App() {
         tasks.map((task) => {
           return (
             <Task
-              content={inputTask}
-              onCheckedTask={checkTasks}
-              onDeleteTask={deleteTasks}
-              checked={checkedTasks.some(
-                (checkedTasks) => checkedTasks === task
-              )}
+              key={task.id}
+              content={task.name}
+              checked={task.checked}
+              id={task.id}
+              // setTasks={setTasks}
+              onCheckedTask={() => handleCheckTask(task.id, !task.checked)}
+              onDelete={() => handleDeleteTask(task.id)}
             />
           );
         })

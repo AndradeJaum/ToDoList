@@ -2,24 +2,22 @@ import CheckboxTask from "../Checkbox";
 import { Icon } from "@iconify/react";
 
 interface TaskProps {
-  checked?: boolean;
   content: string;
-  onCheckedTask: (task: string, checked: boolean) => void;
-  onDeleteTask: (task: string) => void;
+  checked: boolean;
+  onCheckedTask: (id: string, checked: boolean) => void;
+  onDelete: (id: string) => void;
+  id: string;
 }
 
-export default function Task({
-  content,
-  onCheckedTask,
-  onDeleteTask,
-  checked,
-}: TaskProps) {
-  function handleCheckedTask(checked: boolean) {
-    onCheckedTask(content, checked);
+export default function Task({ id,content, onDelete, onCheckedTask, checked }: TaskProps) {
+
+  function handleCheckedTask() {
+    const newCheckedValue = !checked;
+    onCheckedTask(id, newCheckedValue);
   }
 
   function handleDeleteTask() {
-    onDeleteTask(content);
+    onDelete(id);
   }
 
   return (

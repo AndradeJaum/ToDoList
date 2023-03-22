@@ -21,7 +21,7 @@ export default function Input({
         type={type}
         placeholder={placeholder}
         onChange={onChange}
-        className="w-full p-4 rounded-lg bg-gray500 text-gray100 placeholder:text-gray300 text-sm"
+        className="w-full p-4 rounded-lg bg-gray500 text-gray100 placeholder:text-gray300 text-sm outline-0"
       />
     </div>
   );
