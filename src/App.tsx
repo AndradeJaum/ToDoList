@@ -62,8 +62,7 @@ function App() {
 
   function handleDeleteTask(id: string) {
     // const updatedTasks = tasks.filter((task) => task.id !== id);
-    const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const updatedTasks = storedTasks.filter((task: Task) => task.id !== id);
+    const updatedTasks = tasks.filter((task: Task) => task.id !== id);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setTasks(updatedTasks);
   }
