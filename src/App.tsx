@@ -5,7 +5,6 @@ import Input from "./components/Input";
 import Task from "./components/Task";
 import { TaskBoard } from "./components/TaskBoard";
 import { v4 as uuidv4 } from "uuid";
-import React from "react";
 
 interface Task {
   name: string;
@@ -25,7 +24,6 @@ function App() {
       setTasks(JSON.parse(storedTasks));
     }
   }, []);
-  
 
   function handleSubmitForm(event: FormEvent) {
     event.preventDefault();
@@ -34,16 +32,16 @@ function App() {
       id: uuidv4(),
       checked: false,
     };
-  
+
     // Verifica se a task já está salva no Local Storage
     const savedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     const savedTask = savedTasks.find((task: Task) => task.id === newTask.id);
-  
+
     if (savedTask) {
       // Se a task já estiver salva, mantém a informação de checked
       newTask.checked = savedTask.checked;
     }
-  
+
     setTasks([...tasks, newTask]);
     setInputTask("");
   }
@@ -63,7 +61,10 @@ function App() {
   const isTaskEmpty = inputTask.length === 0;
 
   function handleDeleteTask(id: string) {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
+    // const updatedTasks = tasks.filter((task) => task.id !== id);
+    const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const updatedTasks = storedTasks.filter((task: Task) => task.id !== id);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setTasks(updatedTasks);
   }
 
