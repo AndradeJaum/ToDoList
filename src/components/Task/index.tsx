@@ -1,5 +1,6 @@
 import CheckboxTask from "../Checkbox";
 import { Icon } from "@iconify/react";
+import React from "react";
 
 interface TaskProps {
   content: string;

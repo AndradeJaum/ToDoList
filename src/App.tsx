@@ -5,6 +5,7 @@ import Input from "./components/Input";
 import Task from "./components/Task";
 import { TaskBoard } from "./components/TaskBoard";
 import { v4 as uuidv4 } from "uuid";
+import React from "react";
 
 interface Task {
   name: string;
